@@ -11,12 +11,9 @@ function useLocalStorage(KEY, initial) {
   function pullFormLS() {
     return JSON.parse(localStorage.getItem(KEY));
   }
-  function saveToLS(value) {
-    localStorage.setItem(KEY, JSON.stringify(value));
-  }
   useEffect(() => {
-    saveToLS(state);
-  }, [state]);
+    localStorage.setItem(KEY, JSON.stringify(state));
+  }, [state, KEY]);
 
   return [state, setState];
 }

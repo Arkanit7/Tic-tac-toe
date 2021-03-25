@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import useLocalStorage from "../hooks/useLocalStorage";
 export const GameContext = React.createContext();
 
@@ -22,9 +22,7 @@ function GameProvider(props) {
   const [history, setHistory] = useLocalStorage("task.game-history", []);
   const [winner, setWinner] = useLocalStorage("task.game-winner", null);
 
-  useEffect(() => {
-    doWeHaveWinner();
-  }, [board]);
+  doWeHaveWinner();
 
   function updateHistory() {
     setHistory((prevHistory) => [...prevHistory, board]);
@@ -39,6 +37,7 @@ function GameProvider(props) {
   }
 
   function doWeHaveWinner() {
+    if (winner) return;
     if (whoWin()) setWinner(whoWin());
   }
 
