@@ -9,9 +9,15 @@ export default function App() {
   return (
     <div className="wrapper">
       <GameProvider>
-        <GameStats />
-        <Board />
-        <GameHistory />
+        <div className="game">
+          <div className="game__container">
+            <GameStats />
+            <div className="game__row">
+              <Board />
+              <GameHistory />
+            </div>
+          </div>
+        </div>
       </GameProvider>
     </div>
   );

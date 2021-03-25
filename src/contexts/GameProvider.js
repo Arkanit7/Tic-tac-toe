@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import useLocalStorage from "../hooks/useLocalStorage";
 export const GameContext = React.createContext();
 
 const WINNING_COMBINATIONS = [
@@ -13,10 +14,13 @@ const WINNING_COMBINATIONS = [
 ];
 
 function GameProvider(props) {
-  const [board, setBoard] = useState(Array(9).fill(null));
-  const [isXTurn, setIsXTurn] = useState(true);
-  const [history, setHistory] = useState([]);
-  const [winner, setWinner] = useState(null);
+  const [board, setBoard] = useLocalStorage(
+    "task.game-board",
+    Array(9).fill(null)
+  );
+  const [isXTurn, setIsXTurn] = useLocalStorage("task.game-isXTurn", true);
+  const [history, setHistory] = useLocalStorage("task.game-history", []);
+  const [winner, setWinner] = useLocalStorage("task.game-winner", null);
 
   useEffect(() => {
     doWeHaveWinner();
@@ -52,7 +56,7 @@ function GameProvider(props) {
   }
   function setTurn(num) {
     setWinner(null);
-    if (num % 2 == 0) setIsXTurn(true);
+    if (num % 2 === 0) setIsXTurn(true);
     else setIsXTurn(false);
     setBoard(history[num]);
     setHistory(history.filter((_board, index) => index < num));
