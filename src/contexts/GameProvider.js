@@ -16,6 +16,7 @@ function GameProvider(props) {
   const [board, setBoard] = useState(Array(9).fill(null));
   const [isXTurn, setIsXTurn] = useState(true);
   const [history, setHistory] = useState([]);
+  const [winner, setWinner] = useState(null);
 
   useEffect(() => {
     doWeHaveWinner();
@@ -26,8 +27,7 @@ function GameProvider(props) {
   }
 
   function whoWin() {
-    for (let combination of WINNING_COMBINATIONS) {
-      const [a, b, c] = combination;
+    for (const [a, b, c] of WINNING_COMBINATIONS) {
       if (board[a] && board[a] === board[b] && board[c] === board[a]) {
         return board[a];
       }
@@ -35,10 +35,11 @@ function GameProvider(props) {
   }
 
   function doWeHaveWinner() {
-    if (whoWin()) console.log(whoWin());
+    if (whoWin()) setWinner(whoWin());
   }
 
   function setSquare(index) {
+    if (winner) return;
     if (board[index]) return;
     setBoard((prevBoard) =>
       prevBoard.map((val, i) => {
@@ -50,6 +51,9 @@ function GameProvider(props) {
     updateHistory();
   }
   function setTurn(num) {
+    setWinner(null);
+    if (num % 2 == 0) setIsXTurn(true);
+    else setIsXTurn(false);
     setBoard(history[num]);
     setHistory(history.filter((_board, index) => index < num));
   }
@@ -58,6 +62,7 @@ function GameProvider(props) {
       value={{
         board,
         isXTurn,
+        winner,
         history,
         setTurn,
         setSquare,
